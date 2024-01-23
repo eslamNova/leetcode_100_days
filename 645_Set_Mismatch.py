@@ -14,4 +14,5 @@ class Solution:
                 r = i
             if m != 0 and r != 0:
                 break
+                
         return [r,m]
