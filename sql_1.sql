@@ -8,3 +8,5 @@ Select name, area, population from World WHERE area >= 3000000 or population >= 
 Select DISTINCT author_id as id from Views WHERE author_id = viewer_id ORDER BY id
 
 
+SELECT tweet_id from Tweets WHERE length(content) > 15
+
