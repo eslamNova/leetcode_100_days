@@ -9,3 +9,14 @@ Select DISTINCT author_id as id from Views WHERE author_id = viewer_id ORDER BY 
 SELECT tweet_id from Tweets WHERE length(content) > 15
 
 Select eu.unique_id AS unique_id, e.name from Employees e Left Join EmployeeUNI eu USING(id)
+
+import pandas as pd
+
+def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:
+    s_p = sales.merge(product, on=["product_id"])
+
+    df = s_p[['product_name', 'year', 'price']]
+
+    return df
+
+Select p.product_name, s.year, s.price from Sales s Join product p ON s.product_id = p.product_id
