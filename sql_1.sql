@@ -20,3 +20,6 @@ def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:
     return df
 
 Select p.product_name, s.year, s.price from Sales s Join product p ON s.product_id = p.product_id
+
+
+Select w1.id From Weather w1 Join Weather w2 On DATEDIFF(w1.recordDate, w2.recordDate) = 1 WHERE w1.temperature > w2.temperature
