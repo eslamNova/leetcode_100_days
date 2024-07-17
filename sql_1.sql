@@ -23,3 +23,5 @@ Select p.product_name, s.year, s.price from Sales s Join product p ON s.product_
 
 
 Select w1.id From Weather w1 Join Weather w2 On DATEDIFF(w1.recordDate, w2.recordDate) = 1 WHERE w1.temperature > w2.temperature
+
+Select e.name, b.bonus from Employee e LEFT JOIN Bonus b ON e.empId = b.empId WHERE bonus < 1000 or bonus is NULL
