@@ -35,3 +35,6 @@ ORDER BY s.student_id, sub.subject_name;
 
 
 SELECT teacher_id, count(distinct subject_id) as cnt from Teacher group by teacher_id
+
+
+Select class from Courses Group By class Having COUNT(student) >= 5
