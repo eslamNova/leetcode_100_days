@@ -38,3 +38,5 @@ SELECT teacher_id, count(distinct subject_id) as cnt from Teacher group by teach
 
 
 Select class from Courses Group By class Having COUNT(student) >= 5
+
+Select * from Cinema Where MOD(id, 2) = 1 AND description != 'boring' ORDER BY rating DESC;
