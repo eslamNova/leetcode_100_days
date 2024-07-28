@@ -40,3 +40,5 @@ SELECT teacher_id, count(distinct subject_id) as cnt from Teacher group by teach
 Select class from Courses Group By class Having COUNT(student) >= 5
 
 Select * from Cinema Where MOD(id, 2) = 1 AND description != 'boring' ORDER BY rating DESC;
+
+Select activity_date AS day, COUNT(DISTINCT user_id) AS active_users FROM Activity WHERE DATEDIFF('2019-07-27', activity_date) < 30 AND DATEDIFF('2019-07-27', activity_date) >= 0 GROUP BY 1
