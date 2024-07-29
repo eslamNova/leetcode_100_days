@@ -32,7 +32,7 @@ CROSS JOIN Subjects sub
 LEFT JOIN Examinations e ON s.student_id = e.student_id AND sub.subject_name = e.subject_name
 GROUP BY s.student_id, s.student_name, sub.subject_name
 ORDER BY s.student_id, sub.subject_name;
-
+    
 
 SELECT teacher_id, count(distinct subject_id) as cnt from Teacher group by teacher_id
 
@@ -42,3 +42,9 @@ Select class from Courses Group By class Having COUNT(student) >= 5
 Select * from Cinema Where MOD(id, 2) = 1 AND description != 'boring' ORDER BY rating DESC;
 
 Select activity_date AS day, COUNT(DISTINCT user_id) AS active_users FROM Activity WHERE DATEDIFF('2019-07-27', activity_date) < 30 AND DATEDIFF('2019-07-27', activity_date) >= 0 GROUP BY 1
+
+
+SELECT Users.user_id , CONCAT(UPPER(SUBSTR(Users.name,1,1)),LOWER(SUBSTR(Users.name,2))) AS name 
+FROM Users
+ORDER BY
+Users.user_id ASC
