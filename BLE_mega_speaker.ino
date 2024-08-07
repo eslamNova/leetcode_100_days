@@ -1,4 +1,5 @@
 #include <millisDelay.h>
+#include <EEPROM.h>
 #include "DFRobotDFPlayerMini.h" // MUSIC
 
 char Incoming_value = 0;
@@ -7,17 +8,20 @@ const unsigned long FREEZE_TIME = 10000;
 const unsigned long MUSIC_TIME = 12000;
 static unsigned long lastRefreshTime = 0;
 
-int led = 7;
+int led = 13;
 
 int sw1 = 8;
 int sw2 = 9;
 int sw3 = 10;
 int sw4 = 11;
 
+int enableButton = 2;  // Button to enable the timer
+int disableButton = 3; // Button to disable the timer
+
 int t, m, s;
 
 char command;
-bool debug = true;
+bool debug = false;
 
 millisDelay mainDelay;
 millisDelay freezeDelay;
@@ -26,6 +30,7 @@ DFRobotDFPlayerMini myDFPlayer; // MUSIC
 
 unsigned long mainRemainingTime = 0;
 unsigned long currentMillis = 0;
+unsigned long cumulativeTime = 0;
 
 void setup()
 {
@@ -35,13 +40,17 @@ void setup()
     pinMode(sw3, OUTPUT);
     pinMode(sw4, OUTPUT);
 
+    pinMode(enableButton, INPUT_PULLUP);  // Configure the enable button
+    pinMode(disableButton, INPUT_PULLUP); // Configure the disable button
+
     digitalWrite(led, LOW);
     digitalWrite(sw1, LOW);
     digitalWrite(sw2, LOW);
     digitalWrite(sw3, LOW);
     digitalWrite(sw4, LOW);
 
-    Serial.begin(9600); // Built-in Serial for debugging
+    if (debug)
+        Serial.begin(9600); // Built-in Serial for debugging
 
     Serial1.begin(9600); // Bluetooth Serial
     if (debug)
@@ -72,12 +81,22 @@ void setup()
     if (debug)
         Serial.println("MP3 Player setup complete, playing initial track.");
 
+    EEPROM.get(0, cumulativeTime);
+
+    if (debug)
+    {
+        Serial.print("Cumulative Time from EEPROM: ");
+        Serial.println(cumulativeTime);
+    }
+
     if (debug)
         Serial.println("Setup complete");
 }
 
 void loop()
 {
+    delay(100);
+
     if (Serial1.available() > 0)
     {
         Incoming_value = Serial1.read();
@@ -91,11 +110,13 @@ void loop()
         {
         case '1':
             MAIN_TIME = 10000;
-            command = '4' - 48;
+            command = '2' - 48;
             myDFPlayer.play(command);
             musicDelay.start(MUSIC_TIME);
             if (debug)
                 Serial.println("Case 1: Play command 2, MAIN_TIME set to 5000");
+            cumulativeTime += 10; // Add to cumulative time
+            EEPROM.put(0, cumulativeTime);
             break;
         case '2':
             MAIN_TIME = 20000;
@@ -104,6 +125,8 @@ void loop()
             musicDelay.start(MUSIC_TIME);
             if (debug)
                 Serial.println("Case 2: Play command 2, MAIN_TIME set to 10000");
+            cumulativeTime += 20; // Add to cumulative time
+            EEPROM.put(0, cumulativeTime);
             break;
         case '3':
             MAIN_TIME = 30000;
@@ -112,6 +135,8 @@ void loop()
             musicDelay.start(MUSIC_TIME);
             if (debug)
                 Serial.println("Case 3: Play command 2, MAIN_TIME set to 15000");
+            cumulativeTime += 30; // Add to cumulative time
+            EEPROM.put(0, cumulativeTime);
             break;
         case '9':
             mainRemainingTime = mainDelay.remaining();
@@ -131,11 +156,45 @@ void loop()
             if (debug)
                 Serial.println("Case 7: Stop all delays and player");
             break;
+        case '5': // Send cumulative time over Bluetooth
+            // Serial1.print("Cumulative Time: ");
+            Serial1.println(cumulativeTime);
+            if (debug)
+            {
+                Serial.print("Sent cumulative time: ");
+                Serial.println(cumulativeTime);
+            }
+            break;
+
         default:
             if (debug)
                 Serial.println("Unknown command received");
             break;
         }
+    }
+
+    if (digitalRead(enableButton) == LOW)
+    { // Check if the enable button is pressed
+        MAIN_TIME = 15000;
+        command = '2' - 48;
+        myDFPlayer.play(command);
+        musicDelay.start(MUSIC_TIME);
+
+        if (debug)
+            Serial.println("Enable button pressed, MAIN_TIME set to 15000");
+        cumulativeTime += 15; // Add to cumulative time
+        EEPROM.put(0, cumulativeTime);
+    }
+
+    if (digitalRead(disableButton) == LOW)
+    { // Check if the disable button is pressed
+        MAIN_TIME = 0;
+        mainDelay.stop();
+        musicDelay.stop();
+        myDFPlayer.stop();
+
+        if (debug)
+            Serial.println("Disable button pressed, all delays and player stopped");
     }
 
     if (mainDelay.isRunning())
@@ -151,7 +210,7 @@ void loop()
             t = mainDelay.remaining() / 1000;
             m = t / 60;
             s = t % 60;
-            Serial.println(t);
+            Serial1.println(t);
             if (debug)
             {
                 Serial.print("Main delay running, remaining time: ");
@@ -166,8 +225,7 @@ void loop()
         digitalWrite(sw2, LOW);
         digitalWrite(sw3, LOW);
         digitalWrite(sw4, LOW);
-        if (debug)
-            Serial.println("Main delay not running, LED off");
+        // if (debug) Serial.println("Main delay not running, LED off");
     }
 
     if (mainDelay.justFinished())
@@ -179,7 +237,7 @@ void loop()
         digitalWrite(sw4, LOW);
 
         delay(2000);
-        Serial.println(0);
+        Serial1.println(0);
         if (debug)
             Serial.println("Main delay just finished, LED off");
     }
