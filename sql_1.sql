@@ -48,3 +48,5 @@ SELECT Users.user_id , CONCAT(UPPER(SUBSTR(Users.name,1,1)),LOWER(SUBSTR(Users.n
 FROM Users
 ORDER BY
 Users.user_id ASC
+
+Select employee_id FROM Employees Where salary < 30000 AND manager_id NOT IN (Select employee_id From Employees) order by employee_id;
