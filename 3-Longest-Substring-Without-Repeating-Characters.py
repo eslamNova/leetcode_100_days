@@ -1,3 +1,5 @@
+#O(N)
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         pos = [0]
