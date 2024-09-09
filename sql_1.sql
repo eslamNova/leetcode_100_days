@@ -55,3 +55,6 @@ Select employee_id FROM Employees Where salary < 30000 AND manager_id NOT IN (Se
 Select FirstName, LastName, City, State from Person left join Address on Person.PersonId = Address.PersonId ;
 
 Select employee_id, department_id From Employee WHERE primary_flag = "Y" UNION Select employee_id, department_id From Employee GROUP BY employee_id Having COUNT(employee_id) = 1
+
+
+Select project_id, ROUND(AVG(experience_years), 2) AS average_years From Project p Join Employee e On p.employee_id = e.employee_id Group By project_id
