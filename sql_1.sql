@@ -53,3 +53,8 @@ Select employee_id FROM Employees Where salary < 30000 AND manager_id NOT IN (Se
 
 
 Select FirstName, LastName, City, State from Person left join Address on Person.PersonId = Address.PersonId ;
+
+
+Select * From patients Where conditions REGEXP  '\\bDIAB1'
+
+a
