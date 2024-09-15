@@ -65,3 +65,5 @@ Select employee_id, department_id From Employee WHERE primary_flag = "Y" UNION S
 
 Select project_id, ROUND(AVG(experience_years), 2) AS average_years From Project p Join Employee e On p.employee_id = e.employee_id Group By project_id
 >>>>>>> 78a7d953cb8bd57b6289819cb6fe0fb3fef945b0
+
+Select email From Person Group by email Having count(email) > 1
