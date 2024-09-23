@@ -5,4 +5,5 @@ class Solution:
         st = s1 + " " + s2
         c = Counter(st.split(" "))
         return [t for t in c if c[t] == 1]
+    #extra day
         
