@@ -60,3 +60,30 @@ Select * From patients Where conditions REGEXP  '\\bDIAB1'
 a
 
 Select email From Person Group by email Having count(email) > 1;
+
+SELECT MAX(num) AS num
+FROM (
+    SELECT num
+    FROM MyNumbers
+    GROUP BY num
+    HAVING COUNT(num) = 1
+) AS unique_numbers;
+
+
+
+# Write your MySQL query statement below
+
+(SELECT name AS results
+FROM MovieRating JOIN Users USING(user_id)
+GROUP BY name
+ORDER BY COUNT(*) DESC, name
+LIMIT 1)
+
+UNION ALL
+
+(SELECT title AS results
+FROM MovieRating JOIN Movies USING(movie_id)
+WHERE EXTRACT(YEAR_MONTH FROM created_at) = 202002
+GROUP BY title
+ORDER BY AVG(rating) DESC, title
+LIMIT 1);
