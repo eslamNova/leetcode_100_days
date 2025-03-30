@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 26 71 42;
+  --secondary: 184 134 11;
+  --accent: 128 0 32;
+}
+
+body {
+  direction: rtl;
+  font-family: 'Amiri', serif;
+  background-color: #f8f4e9;
+  background-image: linear-gradient(to bottom right, rgba(26, 71, 42, 0.05), rgba(184, 134, 11, 0.05));
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes flowArrow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.connection-arrow {
+  stroke-dasharray: 12;
+  animation: flowArrow 1s linear infinite;
+}
+
+.quran-node {
+  animation: pulse 3s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+@layer components {
+  .day-cell {
+    @apply bg-white/80 rounded-lg p-4 cursor-pointer transition-all duration-300 hover:bg-secondary/20 hover:shadow-lg;
+  }
+  
+  .day-cell.active {
+    @apply bg-secondary/30 shadow-lg scale-105;
+  }
+}
+
+.connections-container {
+  @apply relative w-full overflow-hidden;
+  aspect-ratio: 1 / 1;
+  max-height: 80vh;
+}
