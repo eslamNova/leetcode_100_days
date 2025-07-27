@@ -21,4 +21,5 @@ class Solution:
 
         # 4. Must have at least one vowel and one consonant
         return has_vowel and has_consonant
+        #
         
