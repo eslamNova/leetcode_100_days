@@ -14,3 +14,4 @@ class Solution:
                 seen.add('s')
         return  len(password) > 7 and len(seen) == 4
         
+        #
