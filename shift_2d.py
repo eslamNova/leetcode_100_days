@@ -1,29 +1,17 @@
 class Solution:
     def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
-        rows = len(grid)
-        cols = len(grid[0])
+        f = []
 
-        # Flatten the 2D grid into a 1D list
-        flat_list = []
-        for row in grid:
-            for item in row:
-                flat_list.append(item)
+        for i in grid:
+            for j in i:
+                f.append(j)
 
-        # Calculate the actual number of shifts needed to avoid redundant loops
-        total_elements = rows * cols
-        k %= total_elements
-        
-        # Perform the shift on the flattened list
-        shifted_flat_list = flat_list[-k:] + flat_list[:-k]
+        for n in range(k):
+            f.insert(0, f.pop(-1))
+        ans = [[0 for _ in range(len(grid[0]))] for _ in range(len(grid))]
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                ans[i][j] = f.pop(0)
 
-        # Initialize the new grid with the correct dimensions
-        ans = [[0 for _ in range(cols)] for _ in range(rows)]
-
-        # Refill the new grid using the shifted 1D list
-        for i in range(rows):
-            for j in range(cols):
-                index = i * cols + j
-                ans[i][j] = shifted_flat_list[index]
-                
         return ans
         
